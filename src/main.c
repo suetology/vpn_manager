@@ -10,6 +10,7 @@ static int program_running = 1;
 
 void signal_handler(int sig) 
 {
+        ubus_module_end_loop();
         program_running = 0;
 }
 
@@ -28,7 +29,7 @@ int main()
         }
 
         pthread_t ubus_thread;
-        if (pthread_create(&ubus_thread, NULL, init_ubus_thread, NULL) != 0) {
+        if (pthread_create(&ubus_thread, NULL, ubus_module_init_thread, NULL) != 0) {
                 syslog(LOG_ERR, "Failed creating ubus thread");
                 server_disconnect();
                 return 2;

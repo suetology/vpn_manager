@@ -89,7 +89,7 @@ int disconnect_client(struct ubus_context *ctx, struct ubus_object *obj, struct 
 	return 0;
 }
 
-int init_ubus_thread()
+int ubus_module_init_thread()
 {
 	syslog(LOG_INFO, "Starting ubus thread");
 
@@ -113,4 +113,9 @@ int init_ubus_thread()
 
 	pthread_exit(NULL);
 	return 0;
+}
+
+void ubus_module_end_loop()
+{
+	uloop_end();
 }

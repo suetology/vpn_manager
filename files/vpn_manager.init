@@ -17,5 +17,5 @@ service_triggers() {
 
 reload_service() {
 	stop
-    start
+        start
 }
