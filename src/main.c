@@ -23,6 +23,8 @@ int main()
         signal(SIGTERM, signal_handler);
         signal(SIGQUIT, signal_handler);
 
+        pthread_mutex_init(&clients_lock, NULL);
+
         if (server_connect("127.0.0.1", 7505) != 0) {
                 closelog();
                 return 1;
@@ -32,6 +34,7 @@ int main()
         if (pthread_create(&ubus_thread, NULL, ubus_module_init_thread, NULL) != 0) {
                 syslog(LOG_ERR, "Failed creating ubus thread");
                 server_disconnect();
+                closelog();
                 return 2;
         }
 
@@ -44,6 +47,8 @@ int main()
         pthread_join(ubus_thread, NULL);
         
         server_disconnect();
+
+        pthread_mutex_destroy(&clients_lock);
 
         syslog(LOG_INFO, "Shutdown program");
         closelog();
